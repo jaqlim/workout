@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feminine Silhouette Workout Plan</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <div class="page-wrapper">
+
+    <!-- Header -->
+    <header class="site-header">
+      <p class="eyebrow">Beginner Free Weight Program</p>
+      <h1 class="site-title">Feminine Silhouette<br /><em>Workout Plan</em></h1>
+      <p class="site-subtitle">3 days per week &middot; Lower body focus &middot; Selective hypertrophy</p>
+    </header>
+
+    <!-- Weekly Schedule -->
+    <section class="schedule-card" aria-label="Weekly schedule">
+      <p class="section-label">Alternating Weekly Schedule</p>
+      <div class="schedule-grid">
+        <div class="week-row">
+          <span class="week-num">Week 1</span>
+          <div class="week-dots">
+            <div class="dot-col"><span class="day-label">Mon</span><span class="dot dot-a">A</span></div>
+            <div class="dot-col"><span class="day-label">Wed</span><span class="dot dot-b">B</span></div>
+            <div class="dot-col"><span class="day-label">Fri</span><span class="dot dot-a">A</span></div>
+          </div>
+          <span class="week-desc">Day A · Day B · Day A</span>
+        </div>
+        <div class="week-row">
+          <span class="week-num">Week 2</span>
+          <div class="week-dots">
+            <div class="dot-col"><span class="day-label">Mon</span><span class="dot dot-b">B</span></div>
+            <div class="dot-col"><span class="day-label">Wed</span><span class="dot dot-a">A</span></div>
+            <div class="dot-col"><span class="day-label">Fri</span><span class="dot dot-b">B</span></div>
+          </div>
+          <span class="week-desc">Day B · Day A · Day B</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Day Selector -->
+    <div class="day-selector" role="tablist" aria-label="Select workout day">
+      <button class="day-btn active" data-day="A" role="tab" aria-selected="true" aria-controls="exercises-panel">
+        <span class="day-btn-title">Day A</span>
+        <span class="day-btn-sub">Glutes &amp; Quads</span>
+      </button>
+      <button class="day-btn" data-day="B" role="tab" aria-selected="false" aria-controls="exercises-panel">
+        <span class="day-btn-title">Day B</span>
+        <span class="day-btn-sub">Hamstrings, Outer Glutes &amp; Stability</span>
+      </button>
+    </div>
+
+    <!-- Exercise List -->
+    <div id="exercises-panel" class="exercise-list" role="tabpanel"></div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="divider"></div>
+      <p>When all sets feel easy across two consecutive sessions, increase weight by 2–5 lbs.</p>
+      <p>Tap any exercise to expand form notes.</p>
+    </footer>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
