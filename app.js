@@ -1,5 +1,3 @@
-// ─── Data ──────────────────────────────────────────────────────────────────
-
 const TARGET_COLORS = {
   "Glutes":                          { color: "#c084fc" },
   "Glutes (isolation)":              { color: "#c084fc" },
@@ -125,12 +123,33 @@ const WORKOUTS = {
 let activeDay = "A";
 let openCard  = null;   // index of currently-expanded card, or null
 
+// setProgress[day][exerciseIndex] = number of completed sets (0 to ex.sets)
+const setProgress = { A: {}, B: {} };
+
 // ─── Render ────────────────────────────────────────────────────────────────
 
 function getTagStyle(target) {
   const entry = TARGET_COLORS[target];
   const color = entry ? entry.color : "#94a3b8";
   return `background:${color}1a; color:${color}; border:1px solid ${color}44;`;
+}
+
+function renderSetDots(ex, exIndex) {
+  const completed = setProgress[activeDay][exIndex] || 0;
+  const allDone   = completed === ex.sets;
+
+  return Array.from({ length: ex.sets }, (_, s) => {
+    const done = s < completed;
+    return `
+      <button
+        class="set-dot${done ? " set-dot--done" : ""}${allDone ? " set-dot--all-done" : ""}"
+        data-ex="${exIndex}"
+        data-set="${s}"
+        aria-label="Set ${s + 1}${done ? " (completed)" : ""}"
+        title="Set ${s + 1}"
+      >${s + 1}</button>
+    `;
+  }).join("");
 }
 
 function renderExercises() {
@@ -141,27 +160,28 @@ function renderExercises() {
     .map((ex, i) => {
       const isOpen  = openCard === i;
       const delay   = (i * 0.05).toFixed(2);
+      const completed = setProgress[activeDay][i] || 0;
+      const allDone   = completed === ex.sets;
 
       return `
         <div
-          class="exercise-card${isOpen ? " open" : ""}"
+          class="exercise-card${isOpen ? " open" : ""}${allDone ? " exercise-card--done" : ""}"
           data-index="${i}"
           style="animation-delay:${delay}s"
-          role="button"
-          tabindex="0"
-          aria-expanded="${isOpen}"
           aria-label="${ex.name}"
         >
           <div class="card-row">
-            <span class="card-index">${String(i + 1).padStart(2, "0")}</span>
-            <div class="card-body">
+            <div class="set-dots" data-ex="${i}">
+              ${renderSetDots(ex, i)}
+            </div>
+            <div class="card-body card-body--clickable" data-index="${i}" role="button" tabindex="0" aria-expanded="${isOpen}">
               <div class="card-name-row">
                 <span class="card-name">${ex.name}</span>
                 ${ex.arm ? `<span class="badge badge-arm">Arm</span>` : ""}
               </div>
               <div class="card-meta">${ex.sets} sets &middot; ${ex.reps} reps &middot; ${ex.weight}</div>
             </div>
-            <span class="card-chevron" aria-hidden="true">&#9660;</span>
+            <span class="card-chevron" aria-hidden="true" data-index="${i}">&#9660;</span>
           </div>
 
           <div class="card-detail">
@@ -173,14 +193,35 @@ function renderExercises() {
     })
     .join("");
 
-  // Attach click + keyboard listeners to each card
-  panel.querySelectorAll(".exercise-card").forEach((card) => {
-    card.addEventListener("click", () => toggleCard(+card.dataset.index));
-    card.addEventListener("keydown", (e) => {
+  // Card expand/collapse — only on the body and chevron, not the dots
+  panel.querySelectorAll(".card-body--clickable, .card-chevron").forEach((el) => {
+    el.addEventListener("click", () => toggleCard(+el.dataset.index));
+    el.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        toggleCard(+card.dataset.index);
+        toggleCard(+el.dataset.index);
       }
+    });
+  });
+
+  // Set dot clicks
+  panel.querySelectorAll(".set-dot").forEach((dot) => {
+    dot.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const exIndex = +dot.dataset.ex;
+      const setIndex = +dot.dataset.set;
+      const ex = WORKOUTS[activeDay].exercises[exIndex];
+      const current = setProgress[activeDay][exIndex] || 0;
+
+      // Clicking a completed dot resets back to that set index
+      // Clicking the next incomplete dot marks it complete
+      if (setIndex < current) {
+        setProgress[activeDay][exIndex] = setIndex;
+      } else {
+        setProgress[activeDay][exIndex] = Math.min(setIndex + 1, ex.sets);
+      }
+
+      renderExercises();
     });
   });
 }
