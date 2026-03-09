@@ -1,4 +1,3 @@
-/* ─── Reset & Base ─────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -216,16 +215,55 @@ body {
   gap: 0.75rem;
 }
 
-.card-index {
-  font-size: 0.75rem;
-  color: var(--very-dim);
-  font-weight: 600;
-  width: 22px;
+/* ─── Set Dots ─────────────────────────────────────────────────── */
+.set-dots {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
   flex-shrink: 0;
-  font-variant-numeric: tabular-nums;
+}
+
+.set-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.04);
+  color: var(--dim);
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.15s ease;
+}
+
+.set-dot:hover {
+  border-color: rgba(255,255,255,0.35);
+  color: var(--text);
+  transform: scale(1.1);
+}
+
+.set-dot--done {
+  background: rgba(192,132,252,0.25);
+  border-color: rgba(192,132,252,0.6);
+  color: var(--purple);
+}
+
+.set-dot--all-done {
+  background: rgba(52,211,153,0.2);
+  border-color: rgba(52,211,153,0.55);
+  color: var(--green);
+}
+
+.exercise-card--done {
+  border-color: rgba(52,211,153,0.25) !important;
 }
 
 .card-body { flex: 1; min-width: 0; }
+.card-body--clickable { cursor: pointer; }
 
 .card-name-row {
   display: flex;
